@@ -4,12 +4,15 @@ import { PointerLockControls } from './vendor/PointerLockControls.js';
 import { buildMoon } from './moon.js';
 import { buildISS } from './iss.js';
 
+window.__booted = true;
+
 const canvas = document.getElementById('view');
 const overlay = document.getElementById('overlay');
 const hud = document.getElementById('hud');
 const statusEl = document.getElementById('status');
 const posEl = document.getElementById('pos');
 const modeEl = document.getElementById('mode');
+const lockHint = document.getElementById('lockhint');
 
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -53,6 +56,19 @@ async function switchTo(name) {
   setStatus('');
 }
 
+function showMenu() {
+  overlay.classList.remove('hidden');
+  hud.classList.add('hidden');
+}
+
+// Entering a scene always drops the menu; pointer lock is an enhancement, not
+// a gate — if it is denied the view is still fully usable and the hint shows.
+function showSceneUI() {
+  overlay.classList.add('hidden');
+  hud.classList.remove('hidden');
+  lockHint.classList.toggle('hidden', controls.isLocked);
+}
+
 function lock() {
   controls.lock();
 }
@@ -60,8 +76,12 @@ function lock() {
 overlay.addEventListener('click', (e) => {
   const card = e.target.closest('[data-scene]');
   if (card) {
-    switchTo(card.dataset.scene).then(lock);
+    switchTo(card.dataset.scene).then(() => {
+      showSceneUI();
+      lock();
+    });
   } else {
+    showSceneUI();
     lock();
   }
 });
@@ -71,14 +91,12 @@ hud.addEventListener('click', (e) => {
   if (btn) switchTo(btn.dataset.scene);
 });
 
-controls.addEventListener('lock', () => {
-  overlay.classList.add('hidden');
-  hud.classList.remove('hidden');
+document.addEventListener('click', () => {
+  if (overlay.classList.contains('hidden') && !controls.isLocked) lock();
 });
-controls.addEventListener('unlock', () => {
-  overlay.classList.remove('hidden');
-  hud.classList.add('hidden');
-});
+
+controls.addEventListener('lock', showSceneUI);
+controls.addEventListener('unlock', showMenu);
 
 window.addEventListener('keydown', (e) => {
   if (e.repeat) return;

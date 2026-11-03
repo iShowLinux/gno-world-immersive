@@ -21,6 +21,7 @@
     <div id="help">
       WASD move &middot; Shift sprint &middot; Space jump / thrust &middot; E airlock &middot; 1/2 scenes &middot; Esc release
     </div>
+    <div id="lockhint">Click the view to capture the mouse &middot; Esc to release</div>
     <div id="stats">
       <span id="pos">0, 0, 0</span>
       <span id="mode"></span>
@@ -46,6 +47,19 @@
     </div>
   </div>
 
+  <script>
+    // If the module graph never runs (e.g. the file was opened from disk),
+    // say so instead of leaving a dead landing page.
+    window.__booted = false;
+    setTimeout(function () {
+      if (!window.__booted) {
+        var s = document.getElementById('status');
+        if (s) {
+          s.textContent = 'Serve this folder over HTTP (python -m http.server) — browsers block ES modules from file://';
+        }
+      }
+    }, 4000);
+  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
