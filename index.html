@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GNO.WORLD — Immersive</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    { "imports": { "three": "./js/vendor/three.module.js" } }
+  </script>
+</head>
+<body>
+  <canvas id="view"></canvas>
+
+  <div id="hud" class="hidden">
+    <div id="crosshair"></div>
+    <div id="topbar">
+      <button data-scene="moon"> Moon <span>1</span></button>
+      <button data-scene="iss"> ISS <span>2</span></button>
+    </div>
+    <div id="help">
+      WASD move &middot; Shift sprint &middot; Space jump / thrust &middot; E airlock &middot; 1/2 scenes &middot; Esc release
+    </div>
+    <div id="stats">
+      <span id="pos">0, 0, 0</span>
+      <span id="mode"></span>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <div class="panel">
+      <h1>GNO.WORLD</h1>
+      <p class="sub">An immersive lunar surface and space station &mdash; built for gno.world developers</p>
+      <div class="cards">
+        <div class="card" data-scene="moon">
+          <h2>Moon</h2>
+          <p>High-resolution procedural regolith, a crater field, Earth over the horizon and a landed module.</p>
+        </div>
+        <div class="card" data-scene="iss">
+          <h2>ISS</h2>
+          <p>Walk the pressurized module, look out the cupola at Earth, then EVA into zero-g.</p>
+        </div>
+      </div>
+      <p class="cta">Click a scene to enter</p>
+      <div id="status"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
